@@ -15,8 +15,76 @@ Go code!
 
 const express = require('express');
 require('dotenv').config();
+
+const projectModel = require('./data/helpers/projectModel.js');
+const actionModel = require('./data/helpers/actionModel.js');
+
 const server = express();
+
+
+const router = express.Router();
 const port = process.env.PORT ? process.env.PORT : 4000;
+
+server.use(express.json());
+
+server.get('/projectmodel', (req, res) => {
+    const {id} = req.params
+
+    projectModel.get(id)
+        .then(project => {
+            res.status(200).json(project);
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        })
+})
+
+server.post('/projectmodel', (req, res) => {
+
+    const projectInfo = req.body;
+
+    projectModel.insert(projectInfo)
+        .then(project => {
+            res.status(201).json(project);
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        })
+})
+
+server.put('/projectmodel/:id', (req, res) => {
+    const id = req.params.id
+    const changes = req.body;
+
+    projectModel.update(id, changes)
+        .then(project => {
+           if (project) {
+            res.status(200).json(project);
+           } else {
+            res.status(404).json({message: "not found"});
+           }
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        })
+})
+
+server.delete('/projectmodel/:id', (req, res) => {
+    const { id } = req.params;
+
+    projectModel.remove(id)
+        .then(removed => {
+            if(removed) {
+                res.status(204).end();    
+            } else {
+                res.status(404).json({message: "not found"});
+            }     
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        })
+})
+
 
 server.use('/', (req, res) => {
     res.status(200).send('Hello World! Server is working')
