@@ -12,3 +12,18 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
+
+const express = require('express');
+require('dotenv').config();
+const server = express();
+const port = process.env.PORT ? process.env.PORT : 4000;
+
+server.use('/', (req, res) => {
+    res.status(200).send('Hello World! Server is working')
+})
+
+server.listen(port, () => {
+    console.log(`\n*** Server Running on http://localhost:${port} ***\n`)
+})
+
+
