@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+    express to me seems very similar to how react works where you break everything down into individual components. I like how easy it is to setup a server using express then breaking things down to individual folders.
+
 - [ ] Describe Middleware?
+
+    Middleware are functions that happen between other functions. 
 
 - [ ] Describe a Resource?
 
+    A resource is something like the request body. At least I think so.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+    The API can return a 2xx code.
+
 - [ ] How can we partition our application into sub-applications?
+
+    We can use different files to separate our program. We can also use methods like Express Router and server to divide everything up. 
 
 ## Project Setup
 

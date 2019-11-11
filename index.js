@@ -27,7 +27,7 @@ const port = process.env.PORT ? process.env.PORT : 4000;
 
 server.use(express.json());
 
-server.get('/projectmodel', (req, res) => {
+server.get('/projectmodel/:id', (req, res) => {
     const {id} = req.params
 
     projectModel.get(id)
@@ -39,6 +39,59 @@ server.get('/projectmodel', (req, res) => {
         })
 })
 
+server.get('/projectmodel', (req, res) => {
+    // const {id} = req.params
+
+    projectModel.get()
+        .then(project => {
+            res.status(200).json(project);
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        })
+})
+
+
+server.get('/projectmodel/:project_id/actions', (req, res) => {
+    const project_id = req.params.project_id
+
+    projectModel.getProjectActions(project_id)
+        .then(actions => {
+            res.status(200).json(actions)
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        
+        })
+})
+
+server.get('/projectmodel/:project_id/actions/:id', (req, res) => {
+    const project_id = req.params.project_id
+    const id = req.params.id
+
+    actionModel.get(id)
+        .then(actions => {
+            res.status(200).json(actions)
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        
+        })
+})
+
+server.post('/projectmodel/:project_id/actions', (req, res) => {
+    const project_id = req.params.project_id
+
+    actionModel.insert(project_id)
+        .then(actions => {
+            res.status(200).json(actions)
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        
+        })
+})
+
 server.post('/projectmodel', (req, res) => {
 
     const projectInfo = req.body;
@@ -46,6 +99,24 @@ server.post('/projectmodel', (req, res) => {
     projectModel.insert(projectInfo)
         .then(project => {
             res.status(201).json(project);
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        })
+})
+
+server.put('/projectmodel/:project_id/actions/:id', (req, res) => {
+    const project_id = req.params.project_id
+    const id = req.params.id
+    const changes = req.body
+
+    actionModel.update(id, changes)
+        .then(project => {
+            if (project) {
+            res.status(200).json(project);
+            } else {
+            res.status(404).json({message: "not found"});
+            }
         })
         .catch(error => {
             res.status(500).json(error);
@@ -63,6 +134,22 @@ server.put('/projectmodel/:id', (req, res) => {
            } else {
             res.status(404).json({message: "not found"});
            }
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        })
+})
+
+server.delete('/projectmodel/:project_id/actions/:id', (req, res) => {
+    const { id } = req.params;
+
+    actionModel.remove(id)
+        .then(removed => {
+            if(removed) {
+                res.status(204).end();    
+            } else {
+                res.status(404).json({message: "not found"});
+            }     
         })
         .catch(error => {
             res.status(500).json(error);
